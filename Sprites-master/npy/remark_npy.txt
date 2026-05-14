@@ -1,0 +1,1 @@
+按照 `Sprites-master/README.md` 中的方法可在本文件夹中生成训练和测试所需的 npy 文件。
