@@ -1,6 +1,6 @@
 # HALO_Experiment_Replication
 
-本项目为对于论文《Hamiltonian Latent Operators for Content and Motion Disentanglement in Image Sequences》中 Sprites 实验结果复现的一次尝试，代码架构基于论文的一个[官方实现 repo](https://github.com/MdAsifKhan/HALO) 经修改和完善得到。
+本项目为对于论文《Hamiltonian Latent Operators for Content and Motion Disentanglement in Image Sequences》中 Sprites 部分进行代码实现和实验复现的一次尝试，代码架构基于论文的一个[官方实现 repo](https://github.com/MdAsifKhan/HALO) 经修改和完善得到。
 
 ## 一、本地复现流程
 
@@ -131,8 +131,6 @@ output_model_<dataset>_.../
 ```
 
 ## 二、复现结果
-
-为简洁起见，仓库仅保留了第 200、400、600、800 轮的模型。
 
 - 各损失函数能逐渐下降并收敛至合理数值
 - 人物形象能够正确生成
