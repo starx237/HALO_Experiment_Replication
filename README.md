@@ -10,7 +10,7 @@
 
 从 https://docs.conda.io/en/latest/miniconda.html 下载并安装 Miniconda（Python 3.10+ 版本）。
 
-#### 3.1.2 创建 Conda 环境
+#### 1.1.2 创建 Conda 环境
 
 ```bash
 conda create -n HALO python=3.10
