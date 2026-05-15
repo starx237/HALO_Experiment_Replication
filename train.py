@@ -11,7 +11,7 @@ import yaml
 from dataset import MUG, Sprites
 import functools
 
-# 以下模块暂未使用
+# 以下模块暂未使用，保留供以后参考
 # from torchvision.utils import make_grid, save_image
 # from torchvision import datasets
 # from scipy.stats import entropy
@@ -25,7 +25,8 @@ import functools
 
 def run(config, trainer, train_loader, results_path, device):
 	itern = 1
-	if config['trainer']['resume'] and config['trainer']['resume_epoch']>config['trainer']['PretrainEpochs']:
+	# resume_epoch > 0 时直接从指定轮次恢复，不依赖 PretrainEpochs 判断
+	if config['trainer']['resume'] and config['trainer']['resume_epoch'] > 0:
 		start = config['trainer']['resume_epoch']
 	elif config['trainer']['model']['pretrain']:
 		start = config['trainer']['PretrainEpochs']
@@ -163,7 +164,7 @@ if __name__ == '__main__':
 		config['trainer']['actions'] = len(dataset_train.labels_dict)
 		config['trainer']['nm_seq'] = len(dataset_train.labels)
 
-		train_loader = torch.utils.data.DataLoader(dataset_train, batch_size=config['trainer']['batch_size_train'], shuffle=True, num_workers=2, drop_last=True)
+		train_loader = torch.utils.data.DataLoader(dataset_train, batch_size=config['trainer']['batch_size_train'], shuffle=True, num_workers=config['num_workers'], drop_last=True)
 
 		print(f"Number of training sequence {config['trainer']['nm_seq']}")
 
