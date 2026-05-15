@@ -50,11 +50,11 @@ trainer:
  nm_seq: ???
 
  model:
-  condnSonU: True
+  condnSonU: False
   useZ: True
   uselstmZ: True
   projection: True
-  pretrain: True
+  pretrain: False
   sequential: ???
   qv_x: qv_f_x1toT
   v_dim: 36
