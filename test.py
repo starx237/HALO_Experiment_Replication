@@ -51,10 +51,10 @@ def test(config, trainer, test_loader, results_path, device):
 			#Save sequences
 			for batch in range(batch_size):
 				batch_data = torch.cat([x_orig[batch].unsqueeze(0), x_recon[batch].unsqueeze(0), x_gen[batch].unsqueeze(0)])
-				batch_data = batch_data.permute(0,1,3,4,2).mul(0.5).add(0.5).cpu().numpy()
+				batch_data = batch_data.permute(0,1,3,4,2).clamp(-1, 1).mul(0.5).add(0.5).cpu().numpy()
 				save_seq_img(batch_data,  f"{results_path}/reconstruct_seq_batch_{j}_sample_{batch}.png")
 				batch_data = torch.cat([x_orig[batch].unsqueeze(0), x_gen[batch].unsqueeze(0)])
-				batch_data = batch_data.permute(0,1,3,4,2).mul(0.5).add(0.5).cpu().numpy()
+				batch_data = batch_data.permute(0,1,3,4,2).clamp(-1, 1).mul(0.5).add(0.5).cpu().numpy()
 				save_seq_img(batch_data,  f"{results_path}/generate_seq_batch_{j}_sample_{batch}.png")
 
 
@@ -62,7 +62,7 @@ def test(config, trainer, test_loader, results_path, device):
 			#Save sequences
 			for batch in range(batch_size):
 				batch_data = torch.cat([image[batch].unsqueeze(0), x_recon[batch]])
-				batch_data = batch_data.permute(0,1,3,4,2).mul(0.5).add(0.5).cpu().numpy()
+				batch_data = batch_data.permute(0,1,3,4,2).clamp(-1, 1).mul(0.5).add(0.5).cpu().numpy()
 				save_seq_img(batch_data,  f"{results_path}/image_to_seq_batch_{j}_sample_{batch}.png")
 			
 			x_recon, x_orig = trainer.reconstruct_all_actions(data_test)
@@ -70,7 +70,7 @@ def test(config, trainer, test_loader, results_path, device):
 
 			for batch in range(batch_size):
 				batch_data = torch.cat([x_orig[batch], x_recon[batch]])
-				batch_data = batch_data.permute(0,1,3,4,2).mul(0.5).add(0.5).cpu().numpy()
+				batch_data = batch_data.permute(0,1,3,4,2).clamp(-1, 1).mul(0.5).add(0.5).cpu().numpy()
 				save_seq_img(batch_data,  f"{results_path}/seq_batch_{j}_sample_{batch}.png")
 			
 			batch2 = next(data_loader_iter)
@@ -92,7 +92,7 @@ def test(config, trainer, test_loader, results_path, device):
 			#Save sequences
 			for sample in range(x_11.shape[0]):
 				x_concat = torch.cat([data_test[sample].unsqueeze(0), data_test2[sample].unsqueeze(0), x_11[sample].unsqueeze(0), x_22[sample].unsqueeze(0), x_12[sample].unsqueeze(0), x_21[sample].unsqueeze(0)])
-				x_concat = x_concat.permute(0,1,3,4,2).mul(0.5).add(0.5).cpu().numpy()
+				x_concat = x_concat.permute(0,1,3,4,2).clamp(-1, 1).mul(0.5).add(0.5).cpu().numpy()
 				save_seq_img(x_concat, f"{results_path}/motion_composition_batch_{j}_{sample}.png")
 
 
@@ -100,7 +100,7 @@ def test(config, trainer, test_loader, results_path, device):
 			#Save sequences
 			for batch in range(batch_size):
 				batch_data = torch.cat([x_orig[batch].unsqueeze(0), x_recon[batch].unsqueeze(0)])
-				batch_data = batch_data.permute(0,1,3,4,2).mul(0.5).add(0.5).cpu().numpy()
+				batch_data = batch_data.permute(0,1,3,4,2).clamp(-1, 1).mul(0.5).add(0.5).cpu().numpy()
 				save_seq_img(batch_data,  f"{results_path}/seq_batch_{j}_sample_{batch}.png")
 			
 
@@ -110,21 +110,21 @@ def test(config, trainer, test_loader, results_path, device):
 			#Save sequences
 			for sample in range(x_11.shape[0]):
 				x_concat = torch.cat([data_test[sample].unsqueeze(0), data_test2[sample].unsqueeze(0), x_11[sample].unsqueeze(0), x_22[sample].unsqueeze(0), x_12[sample].unsqueeze(0), x_21[sample].unsqueeze(0)])
-				x_concat = x_concat.permute(0,1,3,4,2).mul(0.5).add(0.5).cpu().numpy()
+				x_concat = x_concat.permute(0,1,3,4,2).clamp(-1, 1).mul(0.5).add(0.5).cpu().numpy()
 				save_seq_img(x_concat, f"{results_path}/style_transfer_batch_{j}_{sample}.png")
 
 
 			#Random Variant Sequence
 			seq_sample = trainer.random_variant_sample(data_test, labels_onehot)
 			batch, time, channels, rows, cols = seq_sample.shape
-			seq_sample = seq_sample.permute(0,1,3,4,2).mul(0.5).add(0.5).cpu().numpy()
+			seq_sample = seq_sample.permute(0,1,3,4,2).clamp(-1, 1).mul(0.5).add(0.5).cpu().numpy()
 			save_seq_img(seq_sample,  f"{results_path}/seq_rand_variant_batch_{j}.png")
 			print(trainer.labels_dict)
 			print(labels)
 
 			#Random invariant sequence
 			seq_sample = trainer.random_invariant_sample(data_test, labels_onehot)
-			seq_sample = seq_sample.permute(0,1,3,4,2).mul(0.5).add(0.5).cpu().numpy()
+			seq_sample = seq_sample.permute(0,1,3,4,2).clamp(-1, 1).mul(0.5).add(0.5).cpu().numpy()
 			save_seq_img(seq_sample,  f"{results_path}/seq_rand_invariant_batch_{j}.png")
 			print(trainer.labels_dict)
 			print(labels)
@@ -134,7 +134,7 @@ def test(config, trainer, test_loader, results_path, device):
 			seq_sample = trainer.random_all_variant_sample(data_test)
 			for k, image in enumerate(seq_sample):
 				nm_seq, time, channels, rows, cols = image.shape
-				image = image.permute(0,1,3,4,2).mul(0.5).add(0.5).cpu().numpy()
+				image = image.permute(0,1,3,4,2).clamp(-1, 1).mul(0.5).add(0.5).cpu().numpy()
 				save_seq_img(image,  f"{results_path}/seq_rand_sample_{k}_batch_{j}.png")
 
 			break  # 只测 1 个 batch 节省时间（取消此行可恢复全部）
