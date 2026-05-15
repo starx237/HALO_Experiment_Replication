@@ -25,7 +25,8 @@ class Sprites(data.Dataset):
 			self.data, self.labels_dict, self.labels, self.attributes_label, self.view_label = self.load(train=train)
 
 		_, self.timesteps, self.rows, self.columns, self.channels = self.data.shape
-		self.data = self.data.reshape(-1, self.timesteps, self.channels, self.rows, self.columns)
+		# 注意: reshape 会打乱 CHW 维度！必须用 permute 进行维度转置
+		self.data = self.data.permute(0, 1, 4, 2, 3).contiguous()  # (N, T, H, W, C) -> (N, T, C, H, W)
 		if config['tanh']:
 			# 将 [0, 1] 映射到 [-1, 1]（与 decoder 的 Tanh 输出范围匹配）
 			self.data = self.data * 2 - 1
