@@ -76,7 +76,11 @@ class DynamicalModelTrainer(nn.Module):
 		self.optim.zero_grad()
 		batch, time, _, _, _ = x_t.shape
 		z, mu, logsigma = self.vae.pretrainEncode(x_t)
-	
+
+		# 预训练阶段 motion 变量不可用，用零填充以匹配 decoder 输入维度 (z_dim + v_dim)
+		v_pad = torch.zeros(*z.shape[:-1], self.config['model']['v_dim']).to(z.device)
+		z = torch.cat([z, v_pad], dim=-1)
+
 		x_t_recon = self.vae.decode(z.to(self.device[1])).to(self.device[0])
 
 		self.recon_loss_pretrain = self.logPx(x_t, x_t_recon)
