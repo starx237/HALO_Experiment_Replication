@@ -137,6 +137,7 @@ def test(config, trainer, test_loader, results_path, device):
 				image = image.permute(0,1,3,4,2).mul(0.5).add(0.5).cpu().numpy()
 				save_seq_img(image,  f"{results_path}/seq_rand_sample_{k}_batch_{j}.png")
 
+			break  # 只测 1 个 batch 节省时间（取消此行可恢复全部）
 	trainer.writer.close()
 
 
@@ -211,6 +212,9 @@ trainer.vae.encoder.load_state_dict(state['encoder'])
 trainer.vae.decoder.load_state_dict(state['decoder'])
 
 if config['trainer']['model']['sequential'] and config['trainer']['model']['dynamics']!='Fourier':
-	trainer.vae.lds.load_state_dict(state['lds'])
+	if 'lds' in state:
+		trainer.vae.lds.load_state_dict(state['lds'])
+	else:
+		print("Warning: checkpoint does not contain 'lds' (probably saved during pretrain). Skipping lds load.")
 
 test(config['trainer'], trainer, test_loader, results_path, device)
