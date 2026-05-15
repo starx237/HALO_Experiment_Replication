@@ -27,7 +27,8 @@ class Sprites(data.Dataset):
 		_, self.timesteps, self.rows, self.columns, self.channels = self.data.shape
 		self.data = self.data.reshape(-1, self.timesteps, self.channels, self.rows, self.columns)
 		if config['tanh']:
-			self.data = torch.tanh(self.data)
+			# 将 [0, 1] 映射到 [-1, 1]（与 decoder 的 Tanh 输出范围匹配）
+			self.data = self.data * 2 - 1
 		
 	def load(self, train=True):
 		data, labels, labels_all, view_labels_all = [], {}, [], []
@@ -166,12 +167,12 @@ class RotatingMNIST(data.Dataset):
 
 		nm_samples = len(self.data)
 		self.data_seq = []
-		for t in self.theta:
-			R_theta_mat = self.R_theta(t)
-			R_theta_mat = repeat(R_theta_mat, 'i j -> b i j', b=nm_samples)
-			grid = F.affine_grid(R_theta_mat, (nm_samples, 1,28,28))
-			data_theta = F.grid_sample(self.data.unsqueeze(1), grid, mode='bilinear', padding_mode='border')
-			self.data_seq.append(data_theta.squeeze())
+		# for t in self.theta:
+		# 	R_theta_mat = self.R_theta(t)
+		# 	R_theta_mat = repeat(R_theta_mat, 'i j -> b i j', b=nm_samples)
+		# 	grid = F.affine_grid(R_theta_mat, (nm_samples, 1,28,28))
+		# 	data_theta = F.grid_sample(self.data.unsqueeze(1), grid, mode='bilinear', padding_mode='border')
+		# 	self.data_seq.append(data_theta.squeeze())
 
 		self.data_seq = torch.stack(self.data_seq).transpose(1,0)
 		if not config['tanh']:
