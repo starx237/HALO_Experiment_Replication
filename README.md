@@ -64,12 +64,12 @@ python train.py --config configs/sprites.yaml --dataname sprites
 训练流程：
 1. 读取配置文件 [`sprites.yaml`](configs/sprites.yaml)
 2. 加载 Sprites 数据集
-3. 已设置 `pretrain: False`，默认不执行预训练
-4. 开始完整训练
+3. 已设置 `pretrain: True`，默认执行 80 个 epoch 的预训练
+4. 预训练完成后，自动加载预训练权重，开始剩余 720 个 epoch 的完整训练
 5. 每 20 个 epoch 保存一次模型
 6. 训练 800 个 epoch 后完成
 
-欲恢复中断的训练，需修改配置文件中的以下设置：
+欲恢复中断的训练，需修改配置文件中的以下设置（`pretrain` 应当保持为 `True`）：
 
 ```yaml
 trainer:
