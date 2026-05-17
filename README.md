@@ -19,6 +19,8 @@ conda activate HALO
 # 安装 PyTorch
 # CUDA 13.0
 pip install torch torchvision --index-url https://download.pytorch.org/whl/cu130
+# 或南大镜像源
+pip install torch torchvision --index-url https://mirrors.nju.edu.cn/pytorch/whl/cu130
 # 或 CPU 版本
 pip install torch torchvision
 
